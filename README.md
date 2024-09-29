@@ -12,11 +12,11 @@ A Simple API Implemented Using GraphQL and Laravel 10 including CRUD Operations.
 - <a href="https://packagist.org/packages/xylis/faker-cinema-providers">Xylis/Faker-Cinema-Providers </a>
 
 ## Installation
-1. Clone the Repository
-```bash
-git clone https://github.com/rezaqsr/Laravel-GraphQL.git
-cd Laravel-GraphQL
-```
+1. Clone the Repository :
+    ```bash
+    git clone https://github.com/rezaqsr/Laravel-GraphQL.git
+    cd Laravel-GraphQL
+    ```
 2. Install dependencies:
     ```bash
     composer install

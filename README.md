@@ -3,7 +3,7 @@
 
 # GraphQL Using Laravel
 
-A Simple API Implemented Using GraphQL and Laravel including CRUD Operations.
+A Simple API Implemented Using GraphQL and Laravel 10 including CRUD Operations.
 
 ## Dependencies
 
@@ -12,29 +12,31 @@ A Simple API Implemented Using GraphQL and Laravel including CRUD Operations.
 - <a href="https://packagist.org/packages/xylis/faker-cinema-providers">Xylis/Faker-Cinema-Providers </a>
 
 ## Installation
-
-1. Install dependencies:
+1. Clone the Repository
+```bash
+git clone https://github.com/rezaqsr/Laravel-GraphQL.git
+cd Laravel-GraphQL
+```
+2. Install dependencies:
     ```bash
     composer install
     ```
-
-
-2. DB Configuration (.env file):
-    <pre>
+3. DB Configuration (.env file):
+   ```bash
     DB_CONNECTION=mysql
     DB_HOST=127.0.0.1
     DB_PORT=3306
     DB_DATABASE=graphql // or any name you want base on the table of db
     DB_USERNAME=root
     DB_PASSWORD= //DB Password (Leave it blank if you have not set it)
-    </pre>
+      ```
 
-6. Run database migrations:
+4. Run database migrations:
     ```bash
     php artisan migrate --seed
     ```
 
-8. Start the development server:
+5. Start the development server:
     ```bash
     php artisan serve
     ```
@@ -96,7 +98,7 @@ query allGenres {
 mutation NewMovie {
     NewMovie(
     director: "Christopher Nolan",
-    name: "tenett",
+    name: "tenet",
     overview: "A sci-fi action thriller film",
     budget: 2000000,
     boxOffice: 3000000,
@@ -122,3 +124,8 @@ mutation DeleteMovie {
    DeleteMovie(id: 5)
 }
 ```
+## Resources
+ - [Laravel Documentation](https://laravel.com/docs)
+ - [Graphql Documentation](https://graphql.org/learn/)
+## License
+This project is open-sourced under the MIT license.

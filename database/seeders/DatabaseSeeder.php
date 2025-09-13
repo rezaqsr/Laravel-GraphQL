@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
     {
         Director::factory(8)->create();
         Genre::factory(4)->create();
-        Movie::factory(20)->create()->each(function($movie) {
+        Movie::factory(30)->create()->each(function($movie) {
         $randomGenres = Genre::all()->random(rand(1,2))->pluck('id');
         $movie->genres()->attach($randomGenres);
     });

@@ -4,6 +4,7 @@ use App\Models\Director;
 use App\Models\Genre;
 use App\Models\Movie;
 use GraphQL\Type\Definition\Type;
+use Illuminate\Support\Facades\Validator;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 use Rebing\GraphQL\Support\Mutation;
 
@@ -14,7 +15,7 @@ class UpdateMovieMutation extends Mutation
     ];
     public function type(): Type
     {
-        return Type::string();
+        return GraphQL::type('Movie');
     }
     public function args(): array
     {
@@ -57,41 +58,52 @@ class UpdateMovieMutation extends Mutation
             ],
         ];
     }
+
+    /**
+     * @throws \Exception
+     */
     public function resolve($root, $args)
     {
-        $movie = Movie::find($args['id']);
-        if (!$movie) {
-            return null;
+
+        $rules = [
+            'id' => 'required|exists:movies,id',
+            'name' => 'sometimes|string|max:255',
+            'overview' => 'sometimes|string',
+            'budget' => 'sometimes|integer|min:0',
+            'boxOffice' => 'sometimes|integer|min:0',
+            'year' => 'sometimes|integer|min:1800|max:' . date('Y'),
+            'country' => 'sometimes|string|max:255',
+            'director' => 'sometimes|string|exists:directors,name',
+            'genres' => 'sometimes|array|min:1',
+            'genres.*' => 'string|exists:genres,name',
+        ];
+
+        $validator = Validator::make($args, $rules);
+
+        if ($validator->fails()) {
+            throw new \Exception($validator->errors()->first());
         }
+
+
+        $movie = Movie::find($args['id']);
+
         foreach ($args as $key => $value) {
-            if ($key !== 'id' && $key !== 'genres' && $key !== 'director') {
+            if (!in_array($key, ['id', 'genres', 'director'])) {
                 $movie->$key = $value;
             }
         }
-        if (isset($args['director'])){
+
+        if (isset($args['director'])) {
             $director = Director::where('name', $args['director'])->first();
-            if (!$director) {
-                $director = new Director();
-                $director->name = $args['director'];
-                $director->save();
-            }
+            $movie->director_id = $director->id;
         }
         $movie->save();
 
         if (isset($args['genres'])) {
-            $genreIds = [];
-            foreach ($args['genres'] as $genreName) {
-                $genre = Genre::where('name', $genreName)->first();
-                if (!$genre) {
-                    $genre = new Genre();
-                    $genre->name = $genreName;
-                    $genre->save();
-                }
-                $genreIds[] = $genre->id;
-            }
+            $genreIds = Genre::whereIn('name', $args['genres'])->pluck('id')->toArray();
             $movie->genres()->sync($genreIds);
         }
 
-        return "movie (id : $movie->id) updated successfully";
+        return $movie;
     }
 }

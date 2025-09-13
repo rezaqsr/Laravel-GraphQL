@@ -16,16 +16,13 @@ class MoviesQuery extends Query
 
     public function type(): Type
     {
-        return Type::listOf(GraphQL::type('Movies'));
+        return Type::listOf(GraphQL::type('Movie'));
     }
 
     public function args(): array
     {
+
         return [
-            'id' => [
-                'name' => 'id',
-                'type' => Type::int(),
-            ],
             'name' => [
                 'name' => 'name',
                 'type' => Type::string(),
@@ -43,30 +40,19 @@ class MoviesQuery extends Query
 
     public function resolve($root, $args): ?array
     {
+
         $query = Movie::query();
 
         if (isset($args['name'])) {
-                $query->where('name', $args['name']) ?? null;
+            $query->where('name', $args['name']);
         }
         if (isset($args['year'])) {
-                $query->where('year', $args['year']) ?? null;
+            $query->where('year', $args['year']);
         }
         if (isset($args['country'])) {
-                $query->where('country', $args['country']) ?? null;
+            $query->where('country', $args['country']);
         }
 
-        return $query->get()->map(function ($movie) {
-            return [
-                'id' => $movie->id,
-                'name' => $movie->name,
-                'director' => $movie->director->name,
-                'overview' => $movie->overview,
-                'budget' => $movie->budget,
-                'boxOffice' => $movie->boxOffice,
-                'year' => $movie->year,
-                'country' => $movie->country,
-                'genres' => $movie->genres->pluck('name')->toArray(),
-            ];
-        })->toArray();
+        return $query->with(['director', 'genres'])->get()->toArray();
     }
 }

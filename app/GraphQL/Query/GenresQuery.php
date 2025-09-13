@@ -17,7 +17,7 @@ class GenresQuery extends Query
 
     public function type(): Type
     {
-        return Type::listOf(GraphQL::type('Genres'));
+        return Type::listOf(GraphQL::type('Genre'));
     }
 
     public function args(): array
@@ -35,26 +35,10 @@ class GenresQuery extends Query
         $query = Genre::query();
 
         if (isset($args['name'])) {
-                $query->where('name', $args['name']) ?? null;
+                $query->where('name', $args['name']);
         }
 
 
-        return $query->get()->map(function ($genre) {
-            return [
-                'name' => $genre->name,
-                'movies' => $genre->movies->map(function ($movie) {
-                    return [
-                        'name' => $movie->name,
-                        'director' => $movie->director->name,
-                        'overview' => $movie->overview,
-                        'budget' => $movie->budget,
-                        'boxOffice' => $movie->boxOffice,
-                        'year' => $movie->year,
-                        'country' => $movie->country,
-                        'genres' => $movie->genres->pluck('name')->toArray(),
-                    ];
-                })->toArray(),
-            ];
-        })->toArray();
+        return $query->with('movies.director')->get()->toArray();
     }
 }

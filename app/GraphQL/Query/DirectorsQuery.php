@@ -17,7 +17,7 @@ class DirectorsQuery extends Query
 
     public function type(): Type
     {
-        return Type::listOf(GraphQL::type('Directors'));
+        return Type::listOf(GraphQL::type('Director'));
     }
 
     public function args(): array
@@ -35,25 +35,9 @@ class DirectorsQuery extends Query
         $query = Director::query();
 
         if (isset($args['name'])) {
-            $query->where('name', $args['name']) ?? null;
+            $query->where('name', $args['name']);
 
         }
-        return $query->get()->map(function ($director) {
-            return [
-                'name' => $director->name,
-                'movies' => $director->movies->map(function ($movie) use ($director) {
-                    return [
-                        'name' => $movie->name,
-                        'director' => $director->name,
-                        'overview' => $movie->overview,
-                        'budget' => $movie->budget,
-                        'boxOffice' => $movie->boxOffice,
-                        'year' => $movie->year,
-                        'country' => $movie->country,
-                        'genres' => $movie->genres->pluck('name')->toArray(),
-                    ];
-                }),
-            ];
-        })->toArray();
+        return $query->with(['movies.genres'])->get()->toArray();
     }
 }

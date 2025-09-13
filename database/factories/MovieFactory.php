@@ -20,13 +20,14 @@ class MovieFactory extends Factory
     {
         $faker = \Faker\Factory::create();
         $faker->addProvider(new \Xylis\FakerCinema\Provider\Movie($faker));
+        $year = $faker->year;
         return [
-            'name' => $faker->movie,
+            'name' => $faker->movie . " ($year)",
             'director_id' => rand(1,8),
             'overview' => $faker->overview,
             'budget' => $this->faker->randomNumber(6),
             'boxOffice' => $this->faker->randomNumber(7),
-            'year' => $this->faker->year,
+            'year' => $year,
             'country' => $this->faker->country,
 
         ];

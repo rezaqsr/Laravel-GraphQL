@@ -1,15 +1,22 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
-<p align="center"><a href="https://graphql.org/" target="_blank"><img src="https://www.vectorlogo.zone/logos/graphql/graphql-ar21.svg" width="300" alt="GraphQL Logo"></a></p>
+<p align="center">
+<a><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="300" alt="Laravel Logo"></a>
+<a><img src="https://www.vectorlogo.zone/logos/graphql/graphql-ar21.svg" width="210" alt="GraphQL Logo"></a>
+</p>
 
-# GraphQL Using Laravel
 
-A Simple API Implemented Using GraphQL and Laravel 10 including CRUD Operations.
+# Laravel & GraphQL
+
+A Simple API Implemented Using GraphQL and Laravel 12 including CRUD Operations.
+
+---
 
 ## Dependencies
 
-- <a href="https://laravel.com/docs/10.x/documentation">Laravel 10.x</a>
+- <a href="https://laravel.com/docs/12.x/documentation">Laravel 12.x</a>
 - <a href="https://github.com/rebing/graphql-laravel">Rebing/Graphql-Laravel</a>
 - <a href="https://packagist.org/packages/xylis/faker-cinema-providers">Xylis/Faker-Cinema-Providers </a>
+
+---
 
 ## Installation
 1. Clone the Repository :
@@ -41,40 +48,51 @@ A Simple API Implemented Using GraphQL and Laravel 10 including CRUD Operations.
     php artisan serve
     ```
 
+---
+
 ## Usage
 
 
-In The Postman , You Can Use The http://127.0.0.1:8000/graphql/ Address
-In The Body Tab, GraphQL Section, Write The Following Queries In The Query Textarea & Fetch The Results
+In The Postman , You Can Use The http://127.0.0.1:8000/graphql/ Address with POST Method. <br>
+In The Body Tab, GraphQL Section, Write The Following Queries In The Query Textarea & Fetch The Results.
 
 <br>
 
-- <p>Fetch All movies</p>
+- <p>Fetch All Movies</p>
 
 ```bash
-query allMovies{
-     movies {
-        id
-        name
-        director
-        overview
-        budget
-        boxOffice
-        year
-        country
-        genres
-     }
+query allMovies {
+  movies {
+    id
+    name
+    overview
+    budget
+    boxOffice
+    year
+    country
+    director {
+      name
+    }
+    genres {
+      name
+    }
+  }
 }
 ```
 
 - <p>Fetch All Directors</p>
 
 ```bash
-query allDirectors{
+query Directors{
      directors {
         name
         movies{
-            name
+            name,
+            year,
+            country,
+            genres{
+                name
+            }
         }
      }
 }
@@ -82,38 +100,87 @@ query allDirectors{
 - <p>Fetch All Genres</p>
 
 ```bash
-query allGenres {
+query Genres {
      genres {
         name
         movies{
-            name
+            name,
+            director {
+                name
+            }
         }
      }
 }
 ```
+- <p>Fetch By Director Name</p>
 
+```bash
+query Directors{
+     directors(name:"Robert Altman") {
+        name
+        movies{
+            name,
+            year,
+            country,
+            genres{
+                name
+            }
+        }
+     }
+}
+```
+<small>You Can Do The Same For Genres. e.g : genres(name:"Horror")</small>
 - <p>Create New Movie</p>
 
 ```bash
-mutation NewMovie {
-    NewMovie(
-    director: "Christopher Nolan",
-    name: "tenet",
+mutation {
+  NewMovie(
+    director: "Robert Altman",
+    name: "Tenet",
     overview: "A sci-fi action thriller film",
     budget: 2000000,
     boxOffice: 3000000,
     year: 2020,
     country: "United States",
-    genres: ["Action", "Sci-Fi", "Fantasy"]
-  )
+    genres: ["Horror", "Suspense"]
+  ) {
+    id
+    name
+    overview
+    budget
+    boxOffice
+    year
+    country
+    director {
+      name
+    }
+    genres {
+      name
+    }
+  }
 }
+
 ```
 
 - <p>Update Movie</p>
 
 ```bash
 mutation UpdateMovie {
-   UpdateMovie(id: 1,name: "tenet")
+   UpdateMovie(id: 31,name: "tenet") {
+    id
+    name
+    overview
+    budget
+    boxOffice
+    year
+    country
+    director {
+      name
+    }
+    genres {
+      name
+    }
+  }
 }
 ```
 
@@ -121,11 +188,11 @@ mutation UpdateMovie {
 
 ```bash
 mutation DeleteMovie {
-   DeleteMovie(id: 5)
+   DeleteMovie(id: 31)
 }
 ```
-## Resources
- - [Laravel Documentation](https://laravel.com/docs)
- - [Graphql Documentation](https://graphql.org/learn/)
+
+---
+
 ## License
 This project is open-sourced under the MIT license.

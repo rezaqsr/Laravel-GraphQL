@@ -8,9 +8,9 @@ use App\GraphQL\Mutation\UpdateMovieMutation;
 use App\GraphQL\Query\DirectorsQuery;
 use App\GraphQL\Query\GenresQuery;
 use App\GraphQL\Query\MoviesQuery;
-use App\GraphQL\Type\DirectorsType;
-use App\GraphQL\Type\GenresType;
-use App\GraphQL\Type\MoviesType;
+use App\GraphQL\Type\DirectorType;
+use App\GraphQL\Type\GenreType;
+use App\GraphQL\Type\MovieType;
 
 return [
     'route' => [
@@ -96,9 +96,10 @@ return [
             ],
             // The types only available in this schema
             'types' => [
-      //
+                'Movie' => MovieType::class,
+                'Director' => DirectorType::class,
+                'Genre' => GenreType::class,
             ],
-
             // Laravel HTTP middleware
             'middleware' => null,
 
@@ -120,9 +121,9 @@ return [
     // ]
     //
     'types' => [
-        'Movies' => MoviesType::class,
-        'Directors' => DirectorsType::class,
-        'Genres' => GenresType::class,
+        'Movies' => MovieType::class,
+        'Directors' => DirectorType::class,
+        'Genres' => GenreType::class,
     ],
 
     // This callable will be passed the Error object for each errors GraphQL catch.

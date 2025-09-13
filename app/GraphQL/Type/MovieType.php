@@ -6,11 +6,10 @@ use App\Models\Movie;
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 use Rebing\GraphQL\Support\Type as GraphQLType;
-
-class MoviesType extends GraphQLType
+class MovieType extends GraphQLType
 {
     protected $attributes = [
-        'name' => 'Movies',
+        'name' => 'Movie',
         'description' => 'Collection of movies',
         'model' => Movie::class
     ];
@@ -19,11 +18,11 @@ class MoviesType extends GraphQLType
     {
         return [
             'id' => [
-                'type' => Type::int(),
-                'description' => 'id of the movie'
+                'type' => Type::nonNull(Type::int()),
+                'description' => 'ID of the movie'
             ],
             'director' => [
-                'type' => Type::string(),
+                'type' => GraphQL::type('Director'),
                 'description' => 'director of the movie'
             ],
             'name' => [
@@ -51,7 +50,7 @@ class MoviesType extends GraphQLType
                 'description' => 'country of the movie'
             ],
             'genres' => [
-                'type' => Type::listOf(Type::string()),
+                'type' => Type::listOf(GraphQL::type('Genre')),
                 'description' => 'Genres of the movie',
             ],
         ];

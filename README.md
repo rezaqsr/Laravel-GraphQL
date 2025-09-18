@@ -31,7 +31,7 @@ A simple API implemented using **GraphQL** and **Laravel 12** including CRUD ope
 
 1. Clone the Repository :
     ```bash
-    git clone https://github.com/rezaqsr/Laravel-GraphQL.git
+    git clone https://github.com/reza-qsr/Laravel-GraphQL.git
     cd Laravel-GraphQL
     ```
 2. Install dependencies:
